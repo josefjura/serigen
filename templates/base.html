@@ -1,0 +1,19 @@
+<head>
+	<script src="https://unpkg.com/htmx.org@1.9.6"
+        integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni"
+        crossorigin="anonymous"></script>
+	<style>
+	 @import url('https://fonts.cdnfonts.com/css/kappa-display');
+	</style>
+  <link rel="stylesheet" href="assets/main.css">
+	<title>Serigen</title>
+	{% block head %}{% endblock %}
+</head>
+<body>
+	
+	<main class="container">
+		<h1>Script number reservation</h1>
+		{% block content %}{% endblock %}
+	</main>
+	{% block scripts %}{% endblock %}
+</body>

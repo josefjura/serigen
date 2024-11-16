@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS codes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    code VARCHAR(255) UNIQUE NOT NULL,
+    created_at DATETIME DEFAULT (
+        STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW')
+    ) NOT NULL
+);

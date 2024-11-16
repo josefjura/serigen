@@ -1,0 +1,32 @@
+{
+  "db_name": "SQLite",
+  "query": "\n\t\t\t\tSELECT id, code, created_at\n\t\t\t\tFROM codes\n\t\t\t\tORDER BY created_at DESC\n\t\t\t\tLIMIT 10;\n\t\t\t",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Int64"
+      },
+      {
+        "name": "code",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "created_at",
+        "ordinal": 2,
+        "type_info": "Datetime"
+      }
+    ],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "25cc6795e3fea4d63c45ee21946eab9675c08781a11b3eb9cffbefe9d2257fb5"
+}

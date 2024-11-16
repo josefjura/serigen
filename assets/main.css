@@ -1,0 +1,86 @@
+html, body {
+	margin: 0;
+	padding: 0;
+	background-color: black;
+	color: white;
+	font-family: 'Kappa Display', sans-serif;
+	/*font-family: 'Kappa Text', sans-serif;*/
+}
+
+.container {
+	width: 100%;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+#number-list {
+	list-style: none;
+	padding: 0px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+#number-list li {
+	list-style: none;
+}
+
+.fade-list {
+	position: relative;
+	height: 250px; /* Set the desired height */
+	overflow: hidden;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.fade-list::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	background: linear-gradient(
+		to bottom,
+		rgba(0, 0, 0, 0) 0%,
+		rgba(0, 0, 0, 1) 100%
+	);
+}
+
+.code {
+	padding: 3px;
+	text-align: center;
+}
+
+#reserve-button {
+	margin-bottom: 15px;
+}
+
+.code-wrapper {
+	display: flex;
+	flex-direction: row;	
+	color: #7c7c7c;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	height:20px
+}
+
+.code-date {
+	font-size: small;
+}
+
+.code-code {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.code-code span {
+	color:white;
+}

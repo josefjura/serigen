@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n\t\tINSERT INTO codes (code)\n\t\tVALUES (?)\n\t",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": []
+  },
+  "hash": "a8977077614d6a193195b6355077b8885692a3528fd65220e6247f7731b9bc01"
+}

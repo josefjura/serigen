@@ -1,0 +1,1 @@
+docker run -d -p 127.0.0.1:8081:80 -v ./data:/usr/local/bin/data serigen:v0.1.0

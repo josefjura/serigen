@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+<script>
+	document.body.addEventListener('htmx:afterSwap', function(evt) {		
+		if (evt.detail.target.id === 'number-list') {
+					let list = document.getElementById('number-list');
+					if (list.children.length > 10) {
+							list.removeChild(list.children[list.children.length - 1]);
+					}
+			}
+	});
+</script>
+{% endblock %}
+
+{% block content %}
+<button id="reserve-button" hx-post="/number" hx-target="#number-list" hx-swap="afterbegin">Make reservation</button>
+<ul id="number-list" class="fade-list">
+	{% for code in codes %}
+		{% include "number.html" %}
+	{% endfor %}
+</ul>
+{% endblock %}

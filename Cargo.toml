@@ -1,0 +1,19 @@
+[package]
+name = "serigen"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+askama = { version = "0.12.1" }
+axum = { version = "0.7.7" }
+serde = { version = "1.0.215", features = ["derive"] }
+serde_json = { version = "1.0.132" }
+tokio = { version = "1.41.1", features = ["full"] }
+tower = { version = "0.5.1", features = ["util"] }
+tower-http = { version = "0.6.1", features = ["fs", "trace", "add-extension"] }
+tracing = "0.1.40"
+tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+chrono = { version = "0.4.38", features = ["serde"] }
+thiserror = { version = "2.0.3" }
+sqlx = { version = "=0.7.0", features = ["runtime-tokio", "sqlite", "chrono"] }
+dotenv = { version = "0.15.0" }

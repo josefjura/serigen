@@ -1,0 +1,25 @@
+INSERT INTO codes (code) VALUES ('V20240101.1');
+
+INSERT INTO codes (code) VALUES ('V20240101.2');
+
+INSERT INTO codes (code) VALUES ('V20240101.3');
+
+INSERT INTO codes (code) VALUES ('V20240102.1');
+
+INSERT INTO codes (code) VALUES ('V20240102.2');
+
+INSERT INTO codes (code) VALUES ('V20240103.3');
+
+INSERT INTO codes (code) VALUES ('V20240104.1');
+
+INSERT INTO codes (code) VALUES ('V20240104.2');
+
+INSERT INTO codes (code) VALUES ('V20240105.1');
+
+INSERT INTO codes (code) VALUES ('V20240105.2');
+
+INSERT INTO codes (code) VALUES ('V20240106.1');
+
+INSERT INTO codes (code) VALUES ('V20240106.3');
+
+INSERT INTO codes (code) VALUES ('V20240106.7');
