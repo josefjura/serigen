@@ -5,15 +5,19 @@ edition = "2021"
 
 [dependencies]
 askama = { version = "0.12.1" }
-axum = { version = "0.7.7" }
+axum = { version = "0.7.9" }
+axum-extra = { version = "0.9.6", features = ["cookie"] }
 serde = { version = "1.0.215", features = ["derive"] }
-serde_json = { version = "1.0.132" }
+serde_json = { version = "1.0.133" }
 tokio = { version = "1.41.1", features = ["full"] }
 tower = { version = "0.5.1", features = ["util"] }
 tower-http = { version = "0.6.1", features = ["fs", "trace", "add-extension"] }
+tower-sessions = { version = "0.13.0" }
 tracing = "0.1.40"
 tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
 chrono = { version = "0.4.38", features = ["serde"] }
 thiserror = { version = "2.0.3" }
-sqlx = { version = "=0.7.0", features = ["runtime-tokio", "sqlite", "chrono"] }
+sqlx = { version = "=0.8.2", features = ["runtime-tokio", "sqlite", "chrono"] }
 dotenv = { version = "0.15.0" }
+jsonwebtoken = { version = "9.3.0" }
+argon2 = "0.5.3"

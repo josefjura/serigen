@@ -1,6 +1,7 @@
 html, body {
 	margin: 0;
 	padding: 0;
+	height: 100%;
 	background-color: black;
 	color: white;
 	font-family: 'Kappa Display', sans-serif;
@@ -9,11 +10,13 @@ html, body {
 
 .container {
 	width: 100%;
-	height: 100vh;
+	height: calc(100vh - 80px);
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	margin: 0px;
+	padding: 0px;
 }
 
 #number-list {
@@ -84,3 +87,55 @@ html, body {
 .code-code span {
 	color:white;
 }
+
+nav {
+	height: 40px;	
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	background-color: #080808;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+nav a {
+	color: white;
+	text-decoration: none;
+}
+
+nav #logo {
+	font-size: large;	
+}
+
+nav #logo {
+	color: white;
+	text-decoration: none;
+}
+
+
+footer {
+	height: 40px;
+	margin: 0px;
+	padding: 0px;
+	display: flex;
+	flex-direction: row;
+	justify-content: end;
+	padding-left: 10px;
+	padding-right: 10px;
+	align-items: center;
+	background-color: #080808;
+}
+
+#login-form {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+}
+
+.logout-link {
+	cursor: pointer;
+}
+

@@ -1,6 +1,7 @@
 use askama::Template;
 use axum::http::StatusCode;
 use axum::response::{Html, IntoResponse, Response};
+use serde::Deserialize;
 
 use crate::db::Code;
 
@@ -8,12 +9,46 @@ use crate::db::Code;
 #[template(path = "index.html")]
 pub struct IndexTemplate {
     pub codes: Vec<Code>,
+    pub from_protected: bool,
 }
+
+impl WithLayout for IndexTemplate {}
+
+#[derive(Template)]
+#[template(path = "login.html")]
+pub struct LoginTemplate {
+    pub from_protected: bool,
+}
+
+impl WithLayout for LoginTemplate {}
 
 #[derive(Template)]
 #[template(path = "number.html")]
 pub struct NumberTemplate {
     pub code: Code,
+}
+
+/// Error 401 page template
+#[derive(Template)]
+#[template(path = "401.html")]
+pub struct Error401Template {
+    pub reason: String,
+    pub from_protected: bool,
+}
+
+impl WithLayout for Error401Template {}
+
+pub trait WithLayout {
+    fn version(&self) -> &'static str {
+        env!("CARGO_PKG_VERSION")
+    }
+}
+
+/// Struct for holding data from the user login form.
+#[derive(Debug, Deserialize)]
+pub struct LoginUserSchema {
+    pub username: String,
+    pub password: String,
 }
 
 //a wrapper for turning askama templates into responses that can be handled by server

@@ -14,6 +14,7 @@
 {% endblock %}
 
 {% block content %}
+<h1>Script number reservation</h1>
 <button id="reserve-button" hx-post="/number" hx-target="#number-list" hx-swap="afterbegin">Make reservation</button>
 <ul id="number-list" class="fade-list">
 	{% for code in codes %}

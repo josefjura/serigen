@@ -27,7 +27,7 @@ pub enum AddNumberError {
     DuplicateCode(String),
 
     #[error("Error communicating with database: '{0}'")]
-    UnknownError(#[from] sqlx::Error),
+    DbError(#[from] sqlx::Error),
 }
 
 // Implement IntoResponse for AddNumberError
@@ -42,7 +42,56 @@ impl IntoResponse for AddNumberError {
                 StatusCode::CONFLICT,
                 "Failed to create a new number".to_string(),
             ),
-            AddNumberError::UnknownError(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()),
+            AddNumberError::DbError(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()),
+        };
+
+        (status, error_message).into_response()
+    }
+}
+
+#[derive(Debug, Error)]
+pub enum ReadUserError {
+    #[error("User with ID: '{0}' not found")]
+    UserNotFound(String),
+
+    #[error("Error communicating with database: '{0}'")]
+    DbError(#[from] sqlx::Error),
+}
+
+// Implement IntoResponse for AddNumberError
+impl IntoResponse for ReadUserError {
+    fn into_response(self) -> Response {
+        let (status, error_message) = match &self {
+            ReadUserError::UserNotFound(user_id) => (
+                StatusCode::NOT_FOUND,
+                format!("User with ID: {} does not exist", user_id),
+            ),
+            ReadUserError::DbError(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()),
+        };
+
+        (status, error_message).into_response()
+    }
+}
+
+#[derive(Debug, Error)]
+pub enum CheckUserPasswordError {
+    #[error("User with password not found")]
+    NotValid,
+
+    #[error("Error communicating with database: '{0}'")]
+    DbError(#[from] sqlx::Error),
+}
+
+// Implement IntoResponse for AddNumberError
+impl IntoResponse for CheckUserPasswordError {
+    fn into_response(self) -> Response {
+        let (status, error_message) = match &self {
+            CheckUserPasswordError::NotValid => {
+                (StatusCode::UNAUTHORIZED, format!("User does not exist"))
+            }
+            CheckUserPasswordError::DbError(e) => {
+                (StatusCode::INTERNAL_SERVER_ERROR, e.to_string())
+            }
         };
 
         (status, error_message).into_response()

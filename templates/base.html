@@ -10,10 +10,19 @@
 	{% block head %}{% endblock %}
 </head>
 <body>
-	
-	<main class="container">
-		<h1>Script number reservation</h1>
+	<nav>
+		<div id="logo"><a href="/">Serigen</a></div>
+		{% if from_protected %}
+		<a class="logout-link" hx-post="/logout"  hx-target="body" hx-push-url="true" >Logout</a>
+		{% else %}
+		<a href="/login">Login</a>
+		{% endif %}
+	</nav>
+	<main class="container">		
 		{% block content %}{% endblock %}
-	</main>
+	</main>	
+	<footer>
+		<div>v{{self.version()}}</div>
+	</footer>
 	{% block scripts %}{% endblock %}
 </body>

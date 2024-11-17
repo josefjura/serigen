@@ -1,6 +1,6 @@
 {
   "db_name": "SQLite",
-  "query": "\n\t\t\t\tSELECT id, code, created_at\n\t\t\t\tFROM codes\n\t\t\t\tORDER BY created_at DESC\n\t\t\t\tLIMIT 10;\n\t\t\t",
+  "query": "\n\tSELECT id, code, created_at, user_id\n\tFROM codes\n\tWHERE code LIKE ?\n\tORDER By created_at DESC\n\tLIMIT 1\n",
   "describe": {
     "columns": [
       {
@@ -17,16 +17,22 @@
         "name": "created_at",
         "ordinal": 2,
         "type_info": "Datetime"
+      },
+      {
+        "name": "user_id",
+        "ordinal": 3,
+        "type_info": "Int64"
       }
     ],
     "parameters": {
-      "Right": 0
+      "Right": 1
     },
     "nullable": [
+      false,
       false,
       false,
       false
     ]
   },
-  "hash": "25cc6795e3fea4d63c45ee21946eab9675c08781a11b3eb9cffbefe9d2257fb5"
+  "hash": "e8cf77f16d7843c5b742e38b8932d9242fe86d9c020ab57bae92f0b2908a5c9b"
 }

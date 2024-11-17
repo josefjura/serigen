@@ -1,0 +1,26 @@
+{
+  "db_name": "SQLite",
+  "query": "\n\t\tSELECT id, name\n\t\tFROM users\n\t\tWHERE name = ? AND password = ?\n\t",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Int64"
+      },
+      {
+        "name": "name",
+        "ordinal": 1,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "cdce9d5893862ffa2c9359e19eb0c2e6b040b6b52b456b6bf5a24f7288c705f7"
+}

@@ -1,0 +1,38 @@
+{
+  "db_name": "SQLite",
+  "query": "\n\t\tSELECT id, code, created_at, user_id\n\t\tFROM codes\n\t\tWHERE id = ?\n\t",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Int64"
+      },
+      {
+        "name": "code",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "created_at",
+        "ordinal": 2,
+        "type_info": "Datetime"
+      },
+      {
+        "name": "user_id",
+        "ordinal": 3,
+        "type_info": "Int64"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "1e3ab75dbcd82b883d5b17831893331d356039b64e49303e9b87ed11aab8a470"
+}
