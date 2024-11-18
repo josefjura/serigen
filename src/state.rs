@@ -1,12 +1,12 @@
 use sqlx::SqlitePool;
 
 #[derive(Debug, Clone)]
-pub struct AppContext {
+pub struct AppState {
     pub db: SqlitePool,
     pub jwt_secret: String,
 }
 
-impl AppContext {
+impl AppState {
     pub fn new(db: SqlitePool, jwt_secret: &str) -> Self {
         Self {
             db,

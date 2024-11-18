@@ -8,7 +8,10 @@ CREATE TABLE IF NOT EXISTS users (
 -- 2. Insert a default Admin user with plaintext password
 INSERT INTO
     users (name, password)
-VALUES ('Admin', 'plaintext_password');
+VALUES (
+        'Admin',
+        '$argon2id$v=19$m=19456,t=2,p=1$FPLq4LNUILUFJssUNFtk5Q$MYcXhclig7w+iXKDj30/eyX0T+iK6LLYJVLGLrO9s0Q'
+    );
 
 -- 3. Rename the existing `codes` table to prepare for migration
 ALTER TABLE codes RENAME TO codes_old;

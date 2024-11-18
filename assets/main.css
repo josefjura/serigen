@@ -81,7 +81,6 @@ html, body {
 
 .code-code {
 	margin-left: 10px;
-	margin-right: 10px;
 }
 
 .code-code span {
@@ -100,8 +99,14 @@ nav {
 }
 
 nav a {
-	color: white;
+	color: rgba(202, 202, 202, 0.884);
 	text-decoration: none;
+	margin-left: 1px;
+	margin-right: 1px;
+}
+
+nav a:hover {
+	color:white;
 }
 
 nav #logo {
@@ -127,7 +132,7 @@ footer {
 	background-color: #080808;
 }
 
-#login-form {
+#login-form, #change-password-form {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -139,3 +144,10 @@ footer {
 	cursor: pointer;
 }
 
+nav .links {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	gap: 10px;
+}

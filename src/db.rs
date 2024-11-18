@@ -1,5 +1,3 @@
-use argon2::{Argon2, PasswordHash, PasswordVerifier};
-use chrono::NaiveDateTime;
 use sqlx::{
     error::ErrorKind,
     sqlite::{SqliteConnectOptions, SqlitePoolOptions},
@@ -8,8 +6,12 @@ use sqlx::{
 use tracing::info;
 
 use crate::{
-    errors::{AddNumberError, CheckUserPasswordError, ReadUserError},
+    errors::{
+        add_number::AddNumberError, check_user_password::CheckUserPasswordError,
+        password_change::PasswordChangeError, read_user::ReadUserError,
+    },
     jwt::verify_password,
+    models::{Code, CodeEntity, CodeValue, User, UserEntity},
 };
 
 pub async fn create_db_pool(path: &str) -> Result<SqlitePool, sqlx::Error> {
@@ -23,80 +25,6 @@ pub async fn create_db_pool(path: &str) -> Result<SqlitePool, sqlx::Error> {
     sqlx::migrate!().run(&db).await?;
     info!("Migrated database");
     Ok(db)
-}
-
-pub struct CodeEntity {
-    #[allow(dead_code)]
-    pub id: i64,
-    pub code: String,
-    pub created_at: NaiveDateTime,
-    #[allow(dead_code)]
-    pub user_id: i64,
-    pub user_name: String,
-}
-
-#[derive(Debug)]
-pub struct Code {
-    pub code: String,
-    pub created_at: String,
-    pub user_name: String,
-}
-
-impl Into<Code> for CodeEntity {
-    fn into(self) -> Code {
-        Code {
-            code: self.code,
-            created_at: format_date(self.created_at),
-            user_name: self.user_name,
-        }
-    }
-}
-
-pub struct CodeValueEntity {
-    pub code: String,
-}
-
-#[derive(Debug)]
-pub struct CodeValue {
-    pub code: String,
-}
-
-impl Into<CodeValue> for CodeValueEntity {
-    fn into(self) -> CodeValue {
-        CodeValue { code: self.code }
-    }
-}
-
-#[derive(Debug)]
-pub struct UserEntity {
-    #[allow(dead_code)]
-    pub id: i64,
-    pub name: String,
-    pub password: String,
-}
-
-#[derive(Debug, Clone)]
-pub struct User {
-    pub id: i64,
-    #[allow(dead_code)]
-    pub name: String,
-}
-
-impl Into<User> for UserEntity {
-    fn into(self) -> User {
-        User {
-            id: self.id,
-            name: self.name,
-        }
-    }
-}
-
-fn format_date(date: NaiveDateTime) -> String {
-    if date.date() == chrono::Local::now().date_naive() {
-        date.format("%H:%M:%S").to_string()
-    } else {
-        date.format("%Y-%m-%d %H:%M:%S").to_string()
-    }
 }
 
 pub async fn read_last_ten(db: &SqlitePool) -> sqlx::Result<Vec<Code>> {
@@ -241,11 +169,30 @@ pub async fn check_email_password(
     }
 
     let user = user.unwrap();
-    let is_valid = verify_password(&password, &user.password);
 
-    if is_valid {
+    if verify_password(&password, &user.password) {
         Ok(user.into())
     } else {
         Err(CheckUserPasswordError::NotValid)
     }
+}
+
+pub async fn change_password(
+    db: &SqlitePool,
+    user_id: i64,
+    hashed_password: &str,
+) -> sqlx::Result<(), PasswordChangeError> {
+    sqlx::query!(
+        r#"
+		UPDATE users
+		SET password = ?
+		WHERE id = ?
+	"#,
+        hashed_password,
+        user_id
+    )
+    .execute(db)
+    .await?;
+
+    Ok(())
 }

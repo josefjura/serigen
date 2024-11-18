@@ -8,16 +8,16 @@ use jsonwebtoken::{decode, DecodingKey, Validation};
 use tower_sessions::Session;
 
 use crate::{
-    context::AppContext,
     db::read_user_by_id,
     jwt::TokenClaims,
-    templates::{Error401Template, HtmlTemplate},
+    state::AppState,
+    templates::{errors::Error401Template, HtmlTemplate},
 };
 
 pub const FROM_PROTECTED_KEY: &str = "from_protected";
 
 pub async fn auth_middleware(
-    State(state): State<AppContext>,
+    State(state): State<AppState>,
     session: Session,
     cookie_jar: CookieJar,
     mut req: Request,

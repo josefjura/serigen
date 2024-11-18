@@ -1,0 +1,6 @@
+<li class="code">
+	<div class="code-wrapper">
+		<div class="code-date">{{code.created_at}}</div>
+		<div class="code-code"><span hx-on:click="var s=this.textContent;navigator.clipboard.writeText(s);this.textContent='Copied';setTimeout(()=>{this.textContent=s}, 1000)">{{ code.code }}</span> was reserved by <span>{{ code.user_name }}</span></div>
+	</div>
+</li>

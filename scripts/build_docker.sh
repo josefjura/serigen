@@ -1,1 +1,1 @@
-docker build -t serigen:v0.1.0 .
+docker build -t serigen:v0.4.0 .

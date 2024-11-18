@@ -1,6 +1,9 @@
 use sqlx::SqlitePool;
 
-use crate::errors::AddNumberError;
+use crate::{
+    errors::{add_number::AddNumberError, check_user_password::CheckUserPasswordError},
+    jwt::hash_password,
+};
 
 #[sqlx::test(fixtures("codes"))]
 async fn read_last_ten(db: SqlitePool) -> sqlx::Result<()> {
@@ -89,6 +92,66 @@ async fn create_number(db: SqlitePool) -> sqlx::Result<(), AddNumberError> {
 
     assert_eq!(code.code, "V20240106.11");
     assert_eq!(code.user_name, "Admin");
+
+    Ok(())
+}
+
+#[sqlx::test(fixtures("codes"))]
+async fn read_user_by_id(db: SqlitePool) -> sqlx::Result<()> {
+    let user = crate::db::read_user_by_id(&db, "1").await;
+
+    assert!(user.is_ok());
+
+    let user = user.unwrap();
+
+    assert_eq!(user.id, 1);
+    assert_eq!(user.name, "Admin");
+
+    Ok(())
+}
+
+#[sqlx::test(fixtures("codes"))]
+async fn read_user_by_id_neg(db: SqlitePool) -> sqlx::Result<()> {
+    let user = crate::db::read_user_by_id(&db, "69").await;
+
+    assert!(user.is_err());
+
+    Ok(())
+}
+
+#[sqlx::test(fixtures("codes"))]
+async fn check_email_password(db: SqlitePool) -> sqlx::Result<()> {
+    let hashed = hash_password("pass");
+    let user = crate::db::check_email_password("Admin".to_string(), hashed.to_string(), &db).await;
+
+    assert!(user.is_ok());
+
+    let user = user.unwrap();
+
+    assert_eq!(user.id, 1);
+    assert_eq!(user.name, "Admin");
+
+    Ok(())
+}
+
+#[sqlx::test(fixtures("codes"))]
+async fn check_email_password_neg(db: SqlitePool) -> sqlx::Result<()> {
+    let hashed = hash_password("pass1");
+    let user = crate::db::check_email_password("Admin".to_string(), hashed.to_string(), &db).await;
+
+    match user {
+        Err(CheckUserPasswordError::NotValid) => assert!(true),
+        _ => assert!(false),
+    }
+
+    Ok(())
+}
+
+#[sqlx::test(fixtures("codes"))]
+async fn change_password(db: SqlitePool) -> sqlx::Result<()> {
+    let user = crate::db::change_password(&db, 1, "new_pass").await;
+
+    assert!(user.is_ok());
 
     Ok(())
 }
