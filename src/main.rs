@@ -59,7 +59,7 @@ fn setup_tracing() {
         .with(
             tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| {
                 format!(
-                    "{crate_name}=debug,*=info,tower_http=debug",
+                    "{crate_name}=debug,tower_http=debug",
                     crate_name = env!("CARGO_CRATE_NAME")
                 )
                 .into()

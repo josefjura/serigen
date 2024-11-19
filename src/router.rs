@@ -10,8 +10,8 @@ use tower_sessions::{MemoryStore, SessionManagerLayer};
 use crate::{
     actions::{
         admin::user_management,
-        auth::{change_password_post, login, login_post, logout_post},
-        codes::{add_code, change_password},
+        auth::{change_password, change_password_post, login, login_post, logout_post},
+        codes::add_code,
         pages::index,
     },
     middleware::auth_middleware,

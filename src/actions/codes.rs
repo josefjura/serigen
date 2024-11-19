@@ -1,7 +1,7 @@
 use crate::{
     errors::add_number::AddNumberError,
     models::User,
-    templates::{auth::ChangePasswordTemplate, codes::NumberTemplate, HtmlTemplate},
+    templates::{auth::ChangePasswordPageTemplate, codes::NumberTemplate, HtmlTemplate},
 };
 use axum::{
     extract::State,
@@ -40,21 +40,4 @@ pub async fn add_code(
             .into_response()),
         Ok(code) => Ok(HtmlTemplate(NumberTemplate { code }).into_response()),
     }
-}
-
-pub async fn change_password(
-    session: Session,
-    Extension(user): Extension<User>,
-) -> impl IntoResponse {
-    let from_protected: bool = session
-        .get(FROM_PROTECTED_KEY)
-        .await
-        .unwrap()
-        .unwrap_or_default();
-
-    HtmlTemplate(ChangePasswordTemplate {
-        from_protected,
-        is_admin: user.is_admin,
-        error: None,
-    })
 }

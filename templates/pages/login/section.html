@@ -1,0 +1,13 @@
+<form id="login-form">
+	<label for="username">Username</label>
+	<input type="text" id="username" name="username" value="{{username}}">
+	<label for="password">Password</label>
+	<input type="password" id="password" name="password" value="{{password}}">
+	{% match error %}
+		{% when Some(e) %}
+				<div class="error-text">{{ e }}</div>
+		{% when None %}
+				<!-- No error -->
+		{% endmatch %}
+	<button type="submit" hx-post="/login" hx-target="#login-form" hx-swap="outerHTML">Login</button>
+</form>

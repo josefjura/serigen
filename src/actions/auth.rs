@@ -2,7 +2,10 @@ use crate::{
     forms::{ChangePasswordSchema, LoginUserSchema},
     models::User,
     templates::{
-        auth::{ChangePasswordSuccessTemplate, ChangePasswordTemplate, LoginTemplate},
+        auth::{
+            ChangePasswordPageTemplate, ChangePasswordSectionTemplate,
+            ChangePasswordSuccessTemplate, LoginPageTemplate, LoginSectionTemplate,
+        },
         errors::Error500Template,
         HtmlTemplate,
     },
@@ -31,7 +34,7 @@ pub async fn login(session: Session) -> impl IntoResponse {
         .unwrap()
         .unwrap_or_default();
 
-    HtmlTemplate(LoginTemplate {
+    HtmlTemplate(LoginPageTemplate {
         from_protected,
         is_admin: false,
         username: "".to_string(),
@@ -54,9 +57,7 @@ pub async fn login_post(
     .await;
 
     if form_data.username.is_empty() || form_data.password.is_empty() {
-        Err(HtmlTemplate(LoginTemplate {
-            from_protected: false,
-            is_admin: false,
+        Err(HtmlTemplate(LoginSectionTemplate {
             username: form_data.username.clone(),
             password: form_data.password,
             error: Some("Username or password cannot be empty".to_string()),
@@ -67,9 +68,7 @@ pub async fn login_post(
     if let Err(err) = result {
         let err = format!("Something went wrong: {}", err);
         error!("{}", err);
-        return Err(HtmlTemplate(LoginTemplate {
-            from_protected: false,
-            is_admin: false,
+        return Err(HtmlTemplate(LoginSectionTemplate {
             username: form_data.username,
             password: "".to_string(),
             error: Some("Wrong username or password".to_string()),
@@ -120,6 +119,23 @@ pub async fn logout_post(session: Session) -> impl IntoResponse {
     (headers, Redirect::to("/login"))
 }
 
+pub async fn change_password(
+    session: Session,
+    Extension(user): Extension<User>,
+) -> impl IntoResponse {
+    let from_protected: bool = session
+        .get(FROM_PROTECTED_KEY)
+        .await
+        .unwrap()
+        .unwrap_or_default();
+
+    HtmlTemplate(ChangePasswordPageTemplate {
+        from_protected,
+        is_admin: user.is_admin,
+        error: None,
+    })
+}
+
 pub async fn change_password_post(
     session: Session,
     State(state): State<AppState>,
@@ -140,9 +156,7 @@ pub async fn change_password_post(
 
     // Check if old and new passwords are the same
     if !is_valid {
-        Err(HtmlTemplate(ChangePasswordTemplate {
-            is_admin: user.is_admin,
-            from_protected,
+        Err(HtmlTemplate(ChangePasswordSectionTemplate {
             error: Some("Old password is incorrect".to_string()),
         })
         .into_response())?
@@ -150,9 +164,7 @@ pub async fn change_password_post(
 
     // Check if old and new passwords are the same
     if form.old_password == form.new_password {
-        Err(HtmlTemplate(ChangePasswordTemplate {
-            is_admin: user.is_admin,
-            from_protected,
+        Err(HtmlTemplate(ChangePasswordSectionTemplate {
             error: Some("Old and new password cannot be the same".to_string()),
         })
         .into_response())?
@@ -160,9 +172,7 @@ pub async fn change_password_post(
 
     // Check if the new password and retype password are the same
     if form.new_password != form.retype_password {
-        Err(HtmlTemplate(ChangePasswordTemplate {
-            is_admin: user.is_admin,
-            from_protected,
+        Err(HtmlTemplate(ChangePasswordSectionTemplate {
             error: Some("New password and retype password do not match".to_string()),
         })
         .into_response())?
