@@ -12,6 +12,12 @@
 	<input type="password" id="new_password" name="new_password">
 	<label for="retype_password">Repeat new password</label>
 	<input type="password" id="retype_password" name="retype_password">
-	<button type="submit" hx-post="/change-password" hx-target="#change-password-form" hx-swap="outerHTML">Login</button>
+	{% match error %}
+    {% when Some(e) %}
+        <div class="error-text">{{ e }}</div>
+    {% when None %}
+        <!-- No error -->
+    {% endmatch %}
+	<button type="submit" hx-post="/change-password" hx-target="body" hx-swap="outerHTML">Login</button>
 </form>
 {% endblock %}

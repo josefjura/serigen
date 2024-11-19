@@ -9,6 +9,7 @@ use tower_sessions::{MemoryStore, SessionManagerLayer};
 
 use crate::{
     actions::{
+        admin::user_management,
         auth::{change_password_post, login, login_post, logout_post},
         codes::{add_code, change_password},
         pages::index,
@@ -43,6 +44,13 @@ pub fn setup_router(db: SqlitePool, jwt_secret: &str) -> Router {
             get(change_password).post(change_password_post).route_layer(
                 middleware::from_fn_with_state(app_state.clone(), auth_middleware),
             ),
+        )
+        .route(
+            "/admin/users",
+            get(user_management).route_layer(middleware::from_fn_with_state(
+                app_state.clone(),
+                auth_middleware,
+            )),
         )
         .nest_service("/assets", ServeDir::new("assets"))
         .layer(session_layer)

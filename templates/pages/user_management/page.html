@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>User management</h1>
+<!-- <button id="reserve-button" hx-post="/number" hx-target="#number-list" hx-swap="afterbegin">Make reservation</button> -->
+<ul id="number-list" class="fade-list">
+	{% for user in users %}
+		{% include "user.html" %}
+	{% endfor %}
+</ul>
+{% endblock %}

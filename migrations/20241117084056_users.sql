@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS users (
     password TEXT NOT NULL -- Hashed password (currently plaintext)
 );
 
--- 2. Insert a default Admin user with plaintext password
+-- 2. Insert a default Admin user
 INSERT INTO
     users (name, password)
 VALUES (

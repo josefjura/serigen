@@ -1,10 +1,17 @@
-use crate::templates::{codes::IndexTemplate, HtmlTemplate};
-use axum::{extract::State, response::IntoResponse};
+use crate::{
+    models::User,
+    templates::{codes::IndexTemplate, HtmlTemplate},
+};
+use axum::{extract::State, response::IntoResponse, Extension};
 use tower_sessions::Session;
 
 use crate::{db::read_last_ten, middleware::FROM_PROTECTED_KEY, state::AppState};
 
-pub async fn index(session: Session, State(state): State<AppState>) -> impl IntoResponse {
+pub async fn index(
+    session: Session,
+    State(state): State<AppState>,
+    Extension(user): Extension<User>,
+) -> impl IntoResponse {
     let from_protected: bool = session
         .get(FROM_PROTECTED_KEY)
         .await
@@ -17,6 +24,7 @@ pub async fn index(session: Session, State(state): State<AppState>) -> impl Into
         Ok(HtmlTemplate(IndexTemplate {
             codes: last_ten,
             from_protected,
+            is_admin: user.is_admin,
         }))
     } else {
         Err("Failed to read last ten numbers")

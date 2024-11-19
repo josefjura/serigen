@@ -10,13 +10,21 @@
 					}
 			}
 	});
+
+	document.getElementById('number-list').addEventListener('htmx:afterSwap', function(event) {
+    const newElement = event.detail.target.firstElementChild; // Target the new element added
+    if (newElement) {
+        newElement.classList.add('new-item');
+        setTimeout(() => newElement.classList.remove('new-item'), 500); // Adjust timeout to match your CSS transition duration
+    }
+	});
 </script>
 {% endblock %}
 
 {% block content %}
 <h1>Script number reservation</h1>
 <button id="reserve-button" hx-post="/number" hx-target="#number-list" hx-swap="afterbegin">Make reservation</button>
-<ul id="number-list" class="fade-list">
+<ul id="number-list" class="fade-list" hx-on="htmx:afterSwap:highlightNew">
 	{% for code in codes %}
 		{% include "number.html" %}
 	{% endfor %}

@@ -8,7 +8,8 @@ use tracing::info;
 use crate::{
     errors::{
         add_number::AddNumberError, check_user_password::CheckUserPasswordError,
-        password_change::PasswordChangeError, read_user::ReadUserError,
+        password_change::ChangePasswordError, read_user::ReadUserError,
+        user_management::UserManagementError,
     },
     jwt::verify_password,
     models::{Code, CodeEntity, CodeValue, User, UserEntity},
@@ -131,7 +132,7 @@ pub async fn read_user_by_id(db: &SqlitePool, user_id: &str) -> sqlx::Result<Use
     let user = sqlx::query_as!(
         UserEntity,
         r#"
-					SELECT id, name, password
+					SELECT id, name, password, is_admin
 					FROM users
 					WHERE id = ?
 				"#,
@@ -155,10 +156,10 @@ pub async fn check_email_password(
     let user = sqlx::query_as!(
         UserEntity,
         r#"
-		SELECT id, name, password
-		FROM users
-		WHERE name = ?
-	"#,
+					SELECT id, name, password, is_admin
+					FROM users
+					WHERE name = ?
+				"#,
         email
     )
     .fetch_optional(db)
@@ -181,7 +182,7 @@ pub async fn change_password(
     db: &SqlitePool,
     user_id: i64,
     hashed_password: &str,
-) -> sqlx::Result<(), PasswordChangeError> {
+) -> sqlx::Result<(), ChangePasswordError> {
     sqlx::query!(
         r#"
 		UPDATE users
@@ -192,7 +193,22 @@ pub async fn change_password(
         user_id
     )
     .execute(db)
-    .await?;
+    .await
+    .map_err(|e| ChangePasswordError::DbError(e))?;
 
     Ok(())
+}
+
+pub async fn read_all_users(db: &SqlitePool) -> sqlx::Result<Vec<User>, UserManagementError> {
+    let user = sqlx::query_as!(
+        UserEntity,
+        r#"
+				SELECT id, name, password, is_admin
+				FROM users				
+			"#
+    )
+    .fetch_all(db)
+    .await?;
+
+    Ok(user.into_iter().map(|x| x.into()).collect())
 }

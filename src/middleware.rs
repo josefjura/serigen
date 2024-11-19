@@ -41,6 +41,7 @@ pub async fn auth_middleware(
         Err(HtmlTemplate(Error401Template {
             reason: "You are not logged in, please provide token".to_string(),
             from_protected: false,
+            is_admin: false,
         })
         .into_response())?
     };
@@ -55,6 +56,7 @@ pub async fn auth_middleware(
         Err(HtmlTemplate(Error401Template {
             reason: "Invalid token".to_string(),
             from_protected: false,
+            is_admin: false,
         })
         .into_response())?
     };
@@ -71,6 +73,7 @@ pub async fn auth_middleware(
         Err(e) => Err(HtmlTemplate(Error401Template {
             reason: e.to_string(),
             from_protected: false,
+            is_admin: false,
         })
         .into_response())?,
     }

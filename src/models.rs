@@ -50,6 +50,7 @@ pub struct UserEntity {
     pub id: i64,
     pub name: String,
     pub password: String,
+    pub is_admin: i64,
 }
 
 #[derive(Debug, Clone)]
@@ -57,6 +58,7 @@ pub struct User {
     pub id: i64,
     #[allow(dead_code)]
     pub name: String,
+    pub is_admin: bool,
 }
 
 impl Into<User> for UserEntity {
@@ -64,6 +66,7 @@ impl Into<User> for UserEntity {
         User {
             id: self.id,
             name: self.name,
+            is_admin: if self.is_admin == 1 { true } else { false },
         }
     }
 }

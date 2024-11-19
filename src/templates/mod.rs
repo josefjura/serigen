@@ -2,6 +2,7 @@ use askama::Template;
 use axum::http::StatusCode;
 use axum::response::{Html, IntoResponse, Response};
 
+pub mod admin;
 pub mod auth;
 pub mod codes;
 pub mod errors;
