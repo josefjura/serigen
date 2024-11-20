@@ -84,7 +84,7 @@ pub async fn read_code(db: &SqlitePool, id: i64) -> sqlx::Result<Option<Code>> {
     Ok(code.map(|c| c.into()))
 }
 
-pub async fn create_number(
+pub async fn create_code(
     db: &SqlitePool,
     code: &str,
     user_id: &str,
@@ -103,7 +103,7 @@ pub async fn create_number(
     };
 
     // Generate the new code
-    let new_code = format!("{}.{}", code, suffix + 1);
+    let new_code = format!("{}.{:0>2}", code, suffix + 1);
     let users = sqlx::query_scalar!(
         r#"
 		INSERT INTO codes (code, user_id)

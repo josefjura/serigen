@@ -73,22 +73,22 @@ async fn read_latest_today_neg(db: SqlitePool) -> sqlx::Result<()> {
 
 #[sqlx::test(fixtures("codes"))]
 async fn create_number(db: SqlitePool) -> sqlx::Result<(), AddNumberError> {
-    let code = crate::db::create_number(&db, "V20240106", "1").await?;
+    let code = crate::db::create_code(&db, "V20240106", "1").await?;
 
     assert_eq!(code.code, "V20240106.8");
     assert_eq!(code.user_name, "Admin");
 
-    let code = crate::db::create_number(&db, "V20240106", "1").await?;
+    let code = crate::db::create_code(&db, "V20240106", "1").await?;
 
     assert_eq!(code.code, "V20240106.9");
     assert_eq!(code.user_name, "Admin");
 
-    let code = crate::db::create_number(&db, "V20240106", "1").await?;
+    let code = crate::db::create_code(&db, "V20240106", "1").await?;
 
     assert_eq!(code.code, "V20240106.10");
     assert_eq!(code.user_name, "Admin");
 
-    let code = crate::db::create_number(&db, "V20240106", "1").await?;
+    let code = crate::db::create_code(&db, "V20240106", "1").await?;
 
     assert_eq!(code.code, "V20240106.11");
     assert_eq!(code.user_name, "Admin");

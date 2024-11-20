@@ -26,7 +26,7 @@
 <button id="reserve-button" hx-post="/number" hx-target="#number-list" hx-swap="afterbegin">Make reservation</button>
 <ul id="number-list" class="fade-list" hx-on="htmx:afterSwap:highlightNew">
 	{% for code in codes %}
-		{% include "number.html" %}
+		{% include "code_item.html" %}
 	{% endfor %}
 </ul>
 {% endblock %}

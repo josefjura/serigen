@@ -15,7 +15,7 @@ pub struct IndexTemplate {
 impl WithLayout for IndexTemplate {}
 
 #[derive(Template)]
-#[template(path = "pages/index/number.html")]
-pub struct NumberTemplate {
+#[template(path = "pages/index/code_item.html")]
+pub struct CodeItemTemplate {
     pub code: Code,
 }

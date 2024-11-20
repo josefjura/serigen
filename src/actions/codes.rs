@@ -1,7 +1,7 @@
 use crate::{
     errors::add_number::AddNumberError,
     models::User,
-    templates::{codes::NumberTemplate, HtmlTemplate},
+    templates::{codes::CodeItemTemplate, HtmlTemplate},
 };
 use axum::{
     extract::State,
@@ -11,7 +11,7 @@ use axum::{
 };
 use chrono::{DateTime, Local};
 
-use crate::{db::create_number, state::AppState};
+use crate::{db::create_code, state::AppState};
 
 pub async fn add_code(
     State(state): State<AppState>,
@@ -21,7 +21,7 @@ pub async fn add_code(
     let code = current_local.format("V%Y%m%d").to_string();
 
     // Create the new number
-    let created_code = create_number(&state.db, &code, &user.id.to_string()).await;
+    let created_code = create_code(&state.db, &code, &user.id.to_string()).await;
 
     match created_code {
         Err(AddNumberError::DuplicateCode(e)) => {
@@ -37,6 +37,6 @@ pub async fn add_code(
             format!("Failed to parse the suffix: {}", e),
         )
             .into_response()),
-        Ok(code) => Ok(HtmlTemplate(NumberTemplate { code }).into_response()),
+        Ok(code) => Ok(HtmlTemplate(CodeItemTemplate { code }).into_response()),
     }
 }

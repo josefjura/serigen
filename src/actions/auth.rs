@@ -13,7 +13,7 @@ use crate::{
 };
 use axum::{
     extract::State,
-    http::header::SET_COOKIE,
+    http::{header::SET_COOKIE, HeaderName},
     response::{AppendHeaders, IntoResponse, Redirect, Response},
     Extension, Form,
 };
@@ -27,6 +27,8 @@ use tracing::{error, info};
 use crate::{
     db::check_email_password, jwt::TokenClaims, middleware::FROM_PROTECTED_KEY, state::AppState,
 };
+
+pub const HX_REDIRECT: HeaderName = HeaderName::from_static("hx-redirect");
 
 pub async fn login(session: Session) -> impl IntoResponse {
     let from_protected = get_protected(session).await;
@@ -97,9 +99,12 @@ pub async fn login_post(
         .same_site(SameSite::Lax)
         .http_only(true);
 
-    let headers = AppendHeaders([(SET_COOKIE, cookie.to_string())]);
+    let headers = AppendHeaders([
+        (SET_COOKIE, cookie.to_string()),
+        (HX_REDIRECT, "/".to_string()),
+    ]);
 
-    Ok((headers, Redirect::to("/")).into_response())
+    Ok((headers, ()).into_response())
 }
 
 pub async fn logout_post(session: Session) -> impl IntoResponse {
