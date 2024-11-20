@@ -9,6 +9,7 @@ use crate::{
         errors::Error500Template,
         HtmlTemplate,
     },
+    utils::get_protected,
 };
 use axum::{
     extract::State,
@@ -28,11 +29,7 @@ use crate::{
 };
 
 pub async fn login(session: Session) -> impl IntoResponse {
-    let from_protected: bool = session
-        .get(FROM_PROTECTED_KEY)
-        .await
-        .unwrap()
-        .unwrap_or_default();
+    let from_protected = get_protected(session).await;
 
     HtmlTemplate(LoginPageTemplate {
         from_protected,
@@ -123,11 +120,7 @@ pub async fn change_password(
     session: Session,
     Extension(user): Extension<User>,
 ) -> impl IntoResponse {
-    let from_protected: bool = session
-        .get(FROM_PROTECTED_KEY)
-        .await
-        .unwrap()
-        .unwrap_or_default();
+    let from_protected = get_protected(session).await;
 
     HtmlTemplate(ChangePasswordPageTemplate {
         from_protected,
@@ -142,11 +135,7 @@ pub async fn change_password_post(
     Extension(user): Extension<User>,
     Form(form): Form<ChangePasswordSchema>,
 ) -> Result<Response, Response> {
-    let from_protected: bool = session
-        .get(FROM_PROTECTED_KEY)
-        .await
-        .unwrap()
-        .unwrap_or_default();
+    let from_protected = get_protected(session).await;
 
     // Check if the old password is correct
     let is_valid = check_email_password(user.name.clone(), form.old_password.clone(), &state.db)

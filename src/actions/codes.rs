@@ -1,7 +1,7 @@
 use crate::{
     errors::add_number::AddNumberError,
     models::User,
-    templates::{auth::ChangePasswordPageTemplate, codes::NumberTemplate, HtmlTemplate},
+    templates::{codes::NumberTemplate, HtmlTemplate},
 };
 use axum::{
     extract::State,
@@ -10,9 +10,8 @@ use axum::{
     Extension,
 };
 use chrono::{DateTime, Local};
-use tower_sessions::Session;
 
-use crate::{db::create_number, middleware::FROM_PROTECTED_KEY, state::AppState};
+use crate::{db::create_number, state::AppState};
 
 pub async fn add_code(
     State(state): State<AppState>,
