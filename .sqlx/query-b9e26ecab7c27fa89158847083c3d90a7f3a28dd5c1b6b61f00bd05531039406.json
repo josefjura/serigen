@@ -1,0 +1,20 @@
+{
+  "db_name": "SQLite",
+  "query": "\n\t\t\t\t\tSELECT COUNT(*) FROM users\n\t\t\t\t\tWHERE id <> ? and is_admin = 1\n\t\t\t\t",
+  "describe": {
+    "columns": [
+      {
+        "name": "COUNT(*)",
+        "ordinal": 0,
+        "type_info": "Integer"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "b9e26ecab7c27fa89158847083c3d90a7f3a28dd5c1b6b61f00bd05531039406"
+}
