@@ -1,9 +1,6 @@
 use sqlx::SqlitePool;
 
-use crate::{
-    errors::{add_number::AddNumberError, check_user_password::CheckUserPasswordError},
-    jwt::hash_password,
-};
+use crate::errors::{add_number::AddNumberError, check_user_password::CheckUserPasswordError};
 
 #[sqlx::test(fixtures("codes"))]
 async fn read_last_ten(db: SqlitePool) -> sqlx::Result<()> {
@@ -75,12 +72,12 @@ async fn read_latest_today_neg(db: SqlitePool) -> sqlx::Result<()> {
 async fn create_number(db: SqlitePool) -> sqlx::Result<(), AddNumberError> {
     let code = crate::db::create_code(&db, "V20240106", "1").await?;
 
-    assert_eq!(code.code, "V20240106.8");
+    assert_eq!(code.code, "V20240106.08");
     assert_eq!(code.user_name, "Admin");
 
     let code = crate::db::create_code(&db, "V20240106", "1").await?;
 
-    assert_eq!(code.code, "V20240106.9");
+    assert_eq!(code.code, "V20240106.09");
     assert_eq!(code.user_name, "Admin");
 
     let code = crate::db::create_code(&db, "V20240106", "1").await?;
@@ -121,8 +118,7 @@ async fn read_user_by_id_neg(db: SqlitePool) -> sqlx::Result<()> {
 
 #[sqlx::test(fixtures("codes"))]
 async fn check_email_password(db: SqlitePool) -> sqlx::Result<()> {
-    let hashed = hash_password("pass");
-    let user = crate::db::check_email_password("Admin".to_string(), hashed.to_string(), &db).await;
+    let user = crate::db::check_email_password("Admin".to_string(), "pass".to_string(), &db).await;
 
     assert!(user.is_ok());
 
@@ -136,8 +132,7 @@ async fn check_email_password(db: SqlitePool) -> sqlx::Result<()> {
 
 #[sqlx::test(fixtures("codes"))]
 async fn check_email_password_neg(db: SqlitePool) -> sqlx::Result<()> {
-    let hashed = hash_password("pass1");
-    let user = crate::db::check_email_password("Admin".to_string(), hashed.to_string(), &db).await;
+    let user = crate::db::check_email_password("Admin".to_string(), "pass1".to_string(), &db).await;
 
     match user {
         Err(CheckUserPasswordError::NotValid) => assert!(true),
@@ -152,6 +147,53 @@ async fn change_password(db: SqlitePool) -> sqlx::Result<()> {
     let user = crate::db::change_password(&db, 1, "new_pass").await;
 
     assert!(user.is_ok());
+
+    Ok(())
+}
+
+#[sqlx::test(fixtures("codes", "extra_users"))]
+async fn delete_user(db: SqlitePool) -> sqlx::Result<()> {
+    let user = crate::db::delete_user(&db, 2).await;
+
+    assert!(user.is_ok());
+
+    Ok(())
+}
+
+#[sqlx::test(fixtures("codes"))]
+async fn delete_user_last_admin(db: SqlitePool) -> sqlx::Result<()> {
+    let user = crate::db::delete_user(&db, 1).await;
+
+    match user {
+        Err(crate::errors::delete_user::DeleteUserError::CantDeleteLastAdmin) => assert!(true),
+        _ => assert!(false),
+    }
+
+    Ok(())
+}
+
+#[sqlx::test(fixtures("codes"))]
+async fn read_all_users(db: SqlitePool) -> sqlx::Result<()> {
+    let users = crate::db::read_all_users(&db).await;
+
+    assert!(users.is_ok());
+
+    let users = users.unwrap();
+
+    assert_eq!(users.len(), 1);
+
+    Ok(())
+}
+
+#[sqlx::test(fixtures("codes"))]
+async fn create_user(db: SqlitePool) -> sqlx::Result<()> {
+    let user = crate::db::create_user(&db, "User".to_string(), "pass".to_string(), false).await;
+
+    assert!(user.is_ok());
+
+    let user = user.unwrap();
+
+    assert_eq!(user.name, "User");
 
     Ok(())
 }
