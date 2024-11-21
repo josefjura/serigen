@@ -230,12 +230,26 @@ pub async fn read_user(db: &SqlitePool, id: i64) -> sqlx::Result<Option<User>, R
 }
 
 pub async fn delete_user(db: &SqlitePool, id: i64) -> sqlx::Result<(), DeleteUserError> {
+    let count = sqlx::query_scalar!(
+        r#"
+					SELECT COUNT(*) FROM users
+					WHERE id <> ? and is_admin = 1
+				"#,
+        id
+    )
+    .fetch_one(db)
+    .await?;
+
+    if count == 0 {
+        Err(DeleteUserError::CantDeleteLastAdmin)?;
+    }
+
     sqlx::query_as!(
         UserEntity,
         r#"
-				DELETE FROM users
-				WHERE id = ?
-			"#,
+					DELETE FROM users
+					WHERE id = ?
+				"#,
         id
     )
     .execute(db)

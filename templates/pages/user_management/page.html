@@ -21,7 +21,7 @@
 <form>
 	<input type="text" name="name" placeholder="Name">
 	<input type="password" name="password" placeholder="Password">
-	<input type="checkbox" name="is_admin" value="is_admin"> Admin
+	<input type="checkbox" name="is_admin" value="true"> Admin
 	<button hx-post="/admin/user" hx-target="#user-table" hx-swap="beforeend">Add user</button>
 </form>
 {% endblock %}
