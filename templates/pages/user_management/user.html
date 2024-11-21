@@ -1,6 +1,6 @@
 <tr>
 	<td>{{ user.name }}</td>
-	<td class="center"> <input type="checkbox" name="is_admin" {% if user.is_admin %} checked {% endif%} /></td>
+	<td class="center">{% if user.is_admin %} <span style="color: green">&#10004;</span> {% else %} &#10060; {% endif%}</td>
 	<td><button hx-delete="/admin/user/{{user.id}}" hx-target="closest tr" hx-swap="outerHTML">
 		X
 	</button></td>

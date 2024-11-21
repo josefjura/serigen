@@ -22,6 +22,7 @@
 {% endblock %}
 
 {% block content %}
+<div class="center-container">
 <h1>Script number reservation</h1>
 <button id="reserve-button" hx-post="/number" hx-target="#number-list" hx-swap="afterbegin">Make reservation</button>
 <ul id="number-list" class="fade-list" hx-on="htmx:afterSwap:highlightNew">
@@ -29,4 +30,5 @@
 		{% include "code_item.html" %}
 	{% endfor %}
 </ul>
+</div>
 {% endblock %}

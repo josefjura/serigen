@@ -1,6 +1,7 @@
 use std::env;
 
 use db::create_db_pool;
+use dotenv::dotenv;
 use errors::ApplicationError;
 use router::setup_router;
 use tokio::net::TcpListener;
@@ -77,7 +78,7 @@ async fn setup_db(data_file: String) -> Result<sqlx::Pool<sqlx::Sqlite>, Applica
 }
 
 fn setup_env() -> Result<(String, String, String, String), ApplicationError> {
-    dotenv::dotenv().ok();
+    dotenv().ok();
 
     let host = std::env::var("SERIGEN_HOST")
         .map_err(|e| ApplicationError::EnvError(e, "SERIGEN_HOST".to_string()))?;
