@@ -4,10 +4,12 @@ use thiserror::Error;
 
 pub mod add_number;
 pub mod check_user_password;
+pub mod create_user;
+pub mod delete_user;
 pub mod login_post_error;
 pub mod password_change;
 pub mod read_user;
-pub mod user_management;
+pub mod read_users;
 
 #[derive(Error, Debug)]
 pub enum ApplicationError {

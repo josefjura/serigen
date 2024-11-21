@@ -170,3 +170,23 @@ nav .links {
 .error-text {
 	color: red;	
 }
+
+#user-table td, #user-table th { padding: 8px; padding: .5rem;
+}
+
+#user-table th {
+  text-align: left;
+  font-weight: 300;
+  font-size: 20px;
+  font-size: 1.25rem;
+}
+
+#user-table {  
+  padding: 16px;
+  padding: 1rem;
+}
+
+#user-table td.center{  
+	text-align: center;
+  vertical-align: middle;
+}

@@ -3,9 +3,25 @@
 {% block content %}
 <h1>User management</h1>
 <!-- <button id="reserve-button" hx-post="/number" hx-target="#number-list" hx-swap="afterbegin">Make reservation</button> -->
-<ul id="number-list" class="fade-list">
-	{% for user in users %}
-		{% include "user.html" %}
-	{% endfor %}
-</ul>
+<table id="user-table">
+	<thead>
+		<tr>
+			<th>Username</th>
+			<th>Admin</th>
+			<th>&nbsp;</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for user in users %}
+			{% include "user.html" %}
+		{% endfor %}
+	</tbody>
+</table>
+<h2>Add user</h2>
+<form>
+	<input type="text" name="name" placeholder="Name">
+	<input type="password" name="password" placeholder="Password">
+	<input type="checkbox" name="is_admin" value="is_admin"> Admin
+	<button hx-post="/admin/user" hx-target="#user-table" hx-swap="beforeend">Add user</button>
+</form>
 {% endblock %}

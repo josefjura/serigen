@@ -1,31 +1,31 @@
 {
   "db_name": "SQLite",
-  "query": "\n\t\tSELECT id, code, created_at, user_id\n\t\tFROM codes\n\t\tWHERE id = ?\n\t",
+  "query": "\n\t\t\t\tSELECT id, name, password, is_admin\n\t\t\t\tFROM users\n\t\t\t",
   "describe": {
     "columns": [
       {
         "name": "id",
         "ordinal": 0,
-        "type_info": "Int64"
+        "type_info": "Integer"
       },
       {
-        "name": "code",
+        "name": "name",
         "ordinal": 1,
         "type_info": "Text"
       },
       {
-        "name": "created_at",
+        "name": "password",
         "ordinal": 2,
-        "type_info": "Datetime"
+        "type_info": "Text"
       },
       {
-        "name": "user_id",
+        "name": "is_admin",
         "ordinal": 3,
-        "type_info": "Int64"
+        "type_info": "Integer"
       }
     ],
     "parameters": {
-      "Right": 1
+      "Right": 0
     },
     "nullable": [
       false,
@@ -34,5 +34,5 @@
       false
     ]
   },
-  "hash": "1e3ab75dbcd82b883d5b17831893331d356039b64e49303e9b87ed11aab8a470"
+  "hash": "5d8925ed8d20965970d2ab37be373ca999b6a4734a376e83f0575d8ec3e68b13"
 }

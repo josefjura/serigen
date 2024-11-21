@@ -1,19 +1,26 @@
 use crate::{
     db::read_all_users,
+    errors::delete_user::DeleteUserError,
+    forms::CreateUserSchema,
     middleware::FROM_PROTECTED_KEY,
     models::User,
-    templates::{admin::UserManagementTemplate, errors::Error500Template, HtmlTemplate},
+    templates::{
+        admin::{UserManagementTemplate, UserTemplate},
+        errors::Error500Template,
+        HtmlTemplate,
+    },
 };
 use axum::{
-    extract::State,
+    extract::{Path, State},
+    http::StatusCode,
     response::{IntoResponse, Response},
-    Extension,
+    Extension, Form,
 };
 use tower_sessions::Session;
 
 use crate::state::AppState;
 
-pub async fn user_management(
+pub async fn get_users(
     session: Session,
     State(state): State<AppState>,
     Extension(user): Extension<User>,
@@ -39,4 +46,39 @@ pub async fn user_management(
         users,
     })
     .into_response())
+}
+
+pub async fn delete_user(
+    Path(id): Path<u64>,
+    State(state): State<AppState>,
+) -> Result<Response, Response> {
+    let result = crate::db::delete_user(&state.db, id as i64).await;
+
+    match result {
+        Ok(_) => Ok(().into_response()),
+        Err(DeleteUserError::CantDeleteLastAdmin) => {
+            Err((StatusCode::BAD_REQUEST, "Can't delete last admin").into_response())
+        }
+        Err(DeleteUserError::DbError(e)) => Err((
+            StatusCode::INTERNAL_SERVER_ERROR,
+            format!("Failed to delete user: {}", e),
+        )
+            .into_response()),
+    }
+}
+
+pub async fn create_user(
+    State(state): State<AppState>,
+    Form(user): Form<CreateUserSchema>,
+) -> Result<Response, Response> {
+    let user = crate::db::create_user(&state.db, user.name, user.password, user.is_admin).await;
+
+    match user {
+        Ok(user) => Ok(HtmlTemplate(UserTemplate { user }).into_response()),
+        Err(e) => Err((
+            StatusCode::INTERNAL_SERVER_ERROR,
+            format!("Failed to create user: {}", e),
+        )
+            .into_response()),
+    }
 }

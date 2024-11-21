@@ -1,6 +1,6 @@
 use axum::{
     middleware,
-    routing::{get, post},
+    routing::{delete, get, post},
     Router,
 };
 use sqlx::SqlitePool;
@@ -9,7 +9,7 @@ use tower_sessions::{MemoryStore, SessionManagerLayer};
 
 use crate::{
     actions::{
-        admin::user_management,
+        admin::{create_user, delete_user, get_users},
         auth::{change_password, change_password_post, login, login_post, logout_post},
         codes::add_code,
         pages::index,
@@ -46,8 +46,17 @@ pub fn setup_router(db: SqlitePool, jwt_secret: &str) -> Router {
             ),
         )
         .route(
-            "/admin/users",
-            get(user_management).route_layer(middleware::from_fn_with_state(
+            "/admin/user",
+            get(get_users)
+                .post(create_user)
+                .route_layer(middleware::from_fn_with_state(
+                    app_state.clone(),
+                    auth_middleware,
+                )),
+        )
+        .route(
+            "/admin/user/:id",
+            delete(delete_user).route_layer(middleware::from_fn_with_state(
                 app_state.clone(),
                 auth_middleware,
             )),

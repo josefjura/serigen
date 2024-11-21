@@ -1,12 +1,12 @@
 {
   "db_name": "SQLite",
-  "query": "\n\t\t\t\tSELECT id, code, created_at, user_id\n\t\t\t\tFROM codes\n\t\t\t\tORDER BY created_at DESC\n\t\t\t\tLIMIT 10\n\t\t\t",
+  "query": "\n\t\t\t\tSELECT codes.id, code, created_at, users.id as user_id, users.name as user_name\n\t\t\t\tFROM codes\n\t\t\t\tJOIN users ON codes.user_id = users.id\n\t\t\t\tORDER BY created_at DESC\n\t\t\t\tLIMIT 10\n\t\t\t",
   "describe": {
     "columns": [
       {
         "name": "id",
         "ordinal": 0,
-        "type_info": "Int64"
+        "type_info": "Integer"
       },
       {
         "name": "code",
@@ -21,7 +21,12 @@
       {
         "name": "user_id",
         "ordinal": 3,
-        "type_info": "Int64"
+        "type_info": "Integer"
+      },
+      {
+        "name": "user_name",
+        "ordinal": 4,
+        "type_info": "Text"
       }
     ],
     "parameters": {
@@ -31,8 +36,9 @@
       false,
       false,
       false,
+      false,
       false
     ]
   },
-  "hash": "d56abd238f18d1ab405a98698163ac45f7da90a93a39a3f038ff78366c3574da"
+  "hash": "d75d3e9a6745d8ab0f62ccde0228e05f37288c8ad11d6049b033cf8b55c20fc6"
 }

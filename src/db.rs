@@ -8,10 +8,10 @@ use tracing::info;
 use crate::{
     errors::{
         add_number::AddNumberError, check_user_password::CheckUserPasswordError,
-        password_change::ChangePasswordError, read_user::ReadUserError,
-        user_management::UserManagementError,
+        create_user::CreateUserError, delete_user::DeleteUserError,
+        password_change::ChangePasswordError, read_user::ReadUserError, read_users::ReadUsersError,
     },
-    jwt::verify_password,
+    jwt::{hash_password, verify_password},
     models::{Code, CodeEntity, CodeValue, User, UserEntity},
 };
 
@@ -185,10 +185,10 @@ pub async fn change_password(
 ) -> sqlx::Result<(), ChangePasswordError> {
     sqlx::query!(
         r#"
-		UPDATE users
-		SET password = ?
-		WHERE id = ?
-	"#,
+				UPDATE users
+				SET password = ?
+				WHERE id = ?
+			"#,
         hashed_password,
         user_id
     )
@@ -199,16 +199,76 @@ pub async fn change_password(
     Ok(())
 }
 
-pub async fn read_all_users(db: &SqlitePool) -> sqlx::Result<Vec<User>, UserManagementError> {
+pub async fn read_all_users(db: &SqlitePool) -> sqlx::Result<Vec<User>, ReadUsersError> {
     let user = sqlx::query_as!(
         UserEntity,
         r#"
 				SELECT id, name, password, is_admin
-				FROM users				
+				FROM users
 			"#
     )
     .fetch_all(db)
     .await?;
-
+    info!("Read all users: {:?}", user);
     Ok(user.into_iter().map(|x| x.into()).collect())
+}
+
+pub async fn read_user(db: &SqlitePool, id: i64) -> sqlx::Result<Option<User>, ReadUsersError> {
+    let user = sqlx::query_as!(
+        UserEntity,
+        r#"
+				SELECT id, name, password, is_admin
+				FROM users
+				WHERE id = ?
+			"#,
+        id
+    )
+    .fetch_optional(db)
+    .await?;
+
+    Ok(user.map(|x| x.into()))
+}
+
+pub async fn delete_user(db: &SqlitePool, id: i64) -> sqlx::Result<(), DeleteUserError> {
+    sqlx::query_as!(
+        UserEntity,
+        r#"
+				DELETE FROM users
+				WHERE id = ?
+			"#,
+        id
+    )
+    .execute(db)
+    .await?;
+
+    Ok(())
+}
+
+pub async fn create_user(
+    db: &SqlitePool,
+    username: String,
+    password: String,
+    is_admin: bool,
+) -> sqlx::Result<User, CreateUserError> {
+    let hashed_password = hash_password(&password);
+
+    let user = sqlx::query_as!(
+        UserEntity,
+        r#"
+		INSERT INTO users (name, password, is_admin)
+		VALUES (?, ?, ?)
+	"#,
+        username,
+        hashed_password,
+        is_admin
+    )
+    .execute(db)
+    .await?;
+
+    let user = read_user(db, user.last_insert_rowid()).await;
+
+    match user {
+        Ok(Some(user)) => Ok(user),
+        _ => Err(CreateUserError::CantRead),
+    }
 }

@@ -13,3 +13,9 @@ pub struct UserManagementTemplate {
 }
 
 impl WithLayout for UserManagementTemplate {}
+
+#[derive(Template)]
+#[template(path = "pages/user_management/user.html")]
+pub struct UserTemplate {
+    pub user: User,
+}
