@@ -22,7 +22,7 @@ use tower_sessions::{
     cookie::{time::Duration, Cookie, SameSite},
     Session,
 };
-use tracing::{error, info};
+use tracing::error;
 
 use crate::{
     db::check_email_password, jwt::TokenClaims, middleware::FROM_PROTECTED_KEY, state::AppState,
@@ -46,8 +46,6 @@ pub async fn login_post(
     State(state): State<AppState>,
     Form(form_data): Form<LoginUserSchema>,
 ) -> Result<Response, Response> {
-    info!("Form: {:?}", form_data);
-
     let result = check_email_password(
         form_data.username.clone(),
         form_data.password.clone(),

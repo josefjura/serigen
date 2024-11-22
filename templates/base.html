@@ -1,38 +1,45 @@
-<head>
-	<script src="https://unpkg.com/htmx.org@1.9.6"
-        integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni"
-        crossorigin="anonymous"></script>
-	<style>
-	 @import url('https://fonts.cdnfonts.com/css/kappa-display');
-	</style>
-  <link rel="stylesheet" href="/assets/main.css">
-	<title>Serigen</title>
-	{% block head %}{% endblock %}
-</head>
-<body>
-	<nav>
-		<div id="logo"><a href="/">Serigen</a></div>
-		<div class="links">
-			
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script src="https://unpkg.com/htmx.org@1.9.6"
+					integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni"
+					crossorigin="anonymous"></script>
+		<style>
+			@import url('https://fonts.cdnfonts.com/css/ubuntu-mono-2');
+		</style>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content="Serial number generator for my team.">
+		<link rel="stylesheet" href="/assets/main.css">
+		<title>Serigen</title>
+		{% block head %}{% endblock %}
+	</head>
+	<body>
+		<nav>
+			<div id="logo"><a href="/">Serigen</a></div>
+			<div class="links">
+				
 
-			{% if from_protected %}
-				{% if is_admin %}
-					<a class="user-admin-link" href="/admin/user" >Manage users</a>
+				{% if from_protected %}
+					<a href="/">Dashboard</a>
 					<div>|</div>
+					{% if is_admin %}
+						<a class="user-admin-link" href="/admin/user" >Manage users</a>
+						<div>|</div>
+					{% endif %}
+					<a href="/change-password">Change password</a>
+					<div>|</div>
+					<a class="logout-link" hx-post="/logout"  hx-target="body" hx-push-url="true" >Logout</a>
+				{% else %}
+					<a href="/login">Login</a>
 				{% endif %}
-				<a href="/change-password">Change password</a>
-				<div>|</div>
-				<a class="logout-link" hx-post="/logout"  hx-target="body" hx-push-url="true" >Logout</a>
-			{% else %}
-				<a href="/login">Login</a>
-			{% endif %}
-		</div>
-	</nav>
-	<main class="container">		
-		{% block content %}{% endblock %}
-	</main>	
-	<footer>
-		<div>v{{self.version()}}</div>
-	</footer>
-	{% block scripts %}{% endblock %}
-</body>
+			</div>
+		</nav>
+		<main class="container">		
+			{% block content %}{% endblock %}
+		</main>	
+		<footer>
+			<div>v{{self.version()}}</div>
+		</footer>
+		{% block scripts %}{% endblock %}
+	</body>
+</html>

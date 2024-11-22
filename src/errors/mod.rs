@@ -10,6 +10,7 @@ pub mod login_post_error;
 pub mod password_change;
 pub mod read_user;
 pub mod read_users;
+pub mod reset_codes;
 
 #[derive(Error, Debug)]
 pub enum ApplicationError {

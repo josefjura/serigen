@@ -4,14 +4,17 @@ use axum::{
     Router,
 };
 use sqlx::SqlitePool;
-use tower_http::{services::ServeDir, trace::TraceLayer};
+use tower_http::{
+    services::{ServeDir, ServeFile},
+    trace::TraceLayer,
+};
 use tower_sessions::{MemoryStore, SessionManagerLayer};
 
 use crate::{
     actions::{
         admin::{create_user, delete_user, get_users},
         auth::{change_password, change_password_post, login, login_post, logout_post},
-        codes::add_code,
+        codes::{add_code, reset_codes},
         pages::index,
     },
     middleware::auth_middleware,
@@ -31,8 +34,15 @@ pub fn setup_router(db: SqlitePool, jwt_secret: &str) -> Router {
             )),
         )
         .route(
-            "/number",
+            "/code",
             post(add_code).route_layer(middleware::from_fn_with_state(
+                app_state.clone(),
+                auth_middleware,
+            )),
+        )
+        .route(
+            "/code/reset",
+            post(reset_codes).route_layer(middleware::from_fn_with_state(
                 app_state.clone(),
                 auth_middleware,
             )),
@@ -62,6 +72,7 @@ pub fn setup_router(db: SqlitePool, jwt_secret: &str) -> Router {
             )),
         )
         .nest_service("/assets", ServeDir::new("assets"))
+        .nest_service("/favicon.ico", ServeFile::new("assets/favicon.ico"))
         .layer(session_layer)
         .layer(TraceLayer::new_for_http())
         .with_state(app_state)

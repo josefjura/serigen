@@ -10,6 +10,7 @@ use crate::{
         add_number::AddNumberError, check_user_password::CheckUserPasswordError,
         create_user::CreateUserError, delete_user::DeleteUserError,
         password_change::ChangePasswordError, read_user::ReadUserError, read_users::ReadUsersError,
+        reset_codes::ResetCodesError,
     },
     jwt::{hash_password, verify_password},
     models::{Code, CodeEntity, CodeValue, User, UserEntity},
@@ -84,12 +85,23 @@ pub async fn read_code(db: &SqlitePool, id: i64) -> sqlx::Result<Option<Code>> {
     Ok(code.map(|c| c.into()))
 }
 
+pub async fn reset_codes(db: &SqlitePool) -> sqlx::Result<(), ResetCodesError> {
+    sqlx::query!(
+        r#"
+		DELETE FROM codes
+	"#
+    )
+    .execute(db)
+    .await?;
+
+    Ok(())
+}
+
 pub async fn create_code(
     db: &SqlitePool,
     code: &str,
     user_id: &str,
 ) -> sqlx::Result<Code, AddNumberError> {
-    info!("Creating new code with prefix: {}", code);
     let latest_code = read_latest_today(db, &code).await?;
     let suffix = match latest_code {
         Some(code) => code
@@ -209,7 +221,7 @@ pub async fn read_all_users(db: &SqlitePool) -> sqlx::Result<Vec<User>, ReadUser
     )
     .fetch_all(db)
     .await?;
-    info!("Read all users: {:?}", user);
+
     Ok(user.into_iter().map(|x| x.into()).collect())
 }
 

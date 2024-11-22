@@ -1,6 +1,6 @@
 use crate::{
     models::User,
-    templates::{codes::IndexTemplate, HtmlTemplate},
+    templates::{codes::IndexPageTemplate, HtmlTemplate},
 };
 use axum::{extract::State, response::IntoResponse, Extension};
 use tower_sessions::Session;
@@ -21,7 +21,7 @@ pub async fn index(
     let last_ten = read_last_ten(&state.db).await;
 
     if let Ok(last_ten) = last_ten {
-        Ok(HtmlTemplate(IndexTemplate {
+        Ok(HtmlTemplate(IndexPageTemplate {
             codes: last_ten,
             from_protected,
             is_admin: user.is_admin,

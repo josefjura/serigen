@@ -4,7 +4,7 @@ html, body {
 	height: 100%;
 	background-color: black;
 	color: white;
-	font-family: 'Kappa Display', sans-serif;
+	font-family: 'Ubuntu Mono', sans-serif;
 	/*font-family: 'Kappa Text', sans-serif;*/
 }
 
@@ -73,10 +73,6 @@ html, body {
 .code {
 	padding: 3px;
 	text-align: center;
-}
-
-#reserve-button {
-	margin-bottom: 15px;
 }
 
 .code-number {
@@ -226,4 +222,39 @@ nav .links {
 .user-wrapper {
 	display: flex;
 	flex-direction: row;		
+}
+
+#codes-list .buttons {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 15px;
+}
+
+.styled-btn {
+  min-width: 120px;
+	min-height: 30px;
+	padding: 10px 25px;	
+  border: 2px solid #FFF;
+  font-family: 'Ubuntu Mono', sans-serif;
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+	color: #FFF;
+}
+
+.simple-btn {
+  transition: all 0.3s ease;
+}
+.simple-btn:hover {
+   box-shadow:
+   -7px -7px 20px 0px #0001,
+   -4px -4px 5px 0px #0002,
+   5px 5px 15px 0px #fff9,
+   2px 2px 3px 0px #fff9;
 }

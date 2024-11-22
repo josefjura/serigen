@@ -1,7 +1,7 @@
 use axum::{
     extract::{Request, State},
     middleware::Next,
-    response::{IntoResponse, Response},
+    response::{IntoResponse, Redirect, Response},
 };
 use axum_extra::extract::CookieJar;
 use jsonwebtoken::{decode, DecodingKey, Validation};
@@ -38,12 +38,7 @@ pub async fn auth_middleware(
     } else {
         session.insert(FROM_PROTECTED_KEY, false).await.unwrap();
 
-        Err(HtmlTemplate(Error401Template {
-            reason: "You are not logged in, please provide token".to_string(),
-            from_protected: false,
-            is_admin: false,
-        })
-        .into_response())?
+        Err(Redirect::to("/login").into_response())?
     };
 
     let claims = if let Ok(clm) = decode::<TokenClaims>(

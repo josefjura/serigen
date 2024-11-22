@@ -1,0 +1,7 @@
+{% block content %}
+<ul id="number-list" class="fade-list" hx-on="htmx:afterSwap:highlightNew">
+	{% for code in codes %}
+		{% include "code_item.html" %}
+	{% endfor %}
+</ul>
+{% endblock %}

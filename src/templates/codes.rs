@@ -6,13 +6,19 @@ use super::WithLayout;
 
 #[derive(Template)]
 #[template(path = "pages/index/page.html")]
-pub struct IndexTemplate {
+pub struct IndexPageTemplate {
     pub codes: Vec<Code>,
     pub from_protected: bool,
     pub is_admin: bool,
 }
 
-impl WithLayout for IndexTemplate {}
+impl WithLayout for IndexPageTemplate {}
+
+#[derive(Template)]
+#[template(path = "pages/index/section.html")]
+pub struct IndexSectionTemplate {
+    pub codes: Vec<Code>,
+}
 
 #[derive(Template)]
 #[template(path = "pages/index/code_item.html")]

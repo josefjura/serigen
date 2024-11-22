@@ -2,8 +2,6 @@
 
 {% block content %}
 
-<!-- <button id="reserve-button" hx-post="/number" hx-target="#number-list" hx-swap="afterbegin">Make reservation</button> -->
-
 <div class="center-top-container">
 	<h1>User management</h1>
 	<form>
@@ -23,7 +21,7 @@
 					<tr>
 						<td><input type="text" name="name" placeholder="Name"><input type="password" name="password" placeholder="Password"></td>
 						<td class="center"> <input type="checkbox" name="is_admin" value="true" ></td>
-						<td><button type="button" hx-post="/admin/user" hx-target="closest tr" hx-swap="beforebegin">Add user</button></td>
+						<td><button type="button" hx-post="/admin/user" hx-target="closest tr" hx-swap="beforebegin" class="styled-btn simple-btn">Add user</button></td>
 					</tr>
 				</tbody>
 			</table>

@@ -1,7 +1,10 @@
 use crate::{
     errors::add_number::AddNumberError,
     models::User,
-    templates::{codes::CodeItemTemplate, HtmlTemplate},
+    templates::{
+        codes::{CodeItemTemplate, IndexSectionTemplate},
+        HtmlTemplate,
+    },
 };
 use axum::{
     extract::State,
@@ -38,5 +41,18 @@ pub async fn add_code(
         )
             .into_response()),
         Ok(code) => Ok(HtmlTemplate(CodeItemTemplate { code }).into_response()),
+    }
+}
+
+pub async fn reset_codes(State(state): State<AppState>) -> Result<Response, Response> {
+    let created_code = crate::db::reset_codes(&state.db).await;
+
+    match created_code {
+        Err(e) => Err((
+            StatusCode::INTERNAL_SERVER_ERROR,
+            format!("Failed to reset codes: {}", e),
+        )
+            .into_response()),
+        Ok(_) => Ok(HtmlTemplate(IndexSectionTemplate { codes: vec![] }).into_response()),
     }
 }
