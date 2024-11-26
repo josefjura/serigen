@@ -1,7 +1,7 @@
 use std::env;
 
 use db::create_db_pool;
-use dotenv::dotenv;
+use dotenvy::dotenv;
 use errors::ApplicationError;
 use router::setup_router;
 use tokio::net::TcpListener;
