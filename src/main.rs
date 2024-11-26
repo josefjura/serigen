@@ -45,13 +45,13 @@ async fn run() -> Result<(), ApplicationError> {
 
     let listener = TcpListener::bind(address)
         .await
-        .map_err(|e| ApplicationError::from(e))?;
+        .map_err(ApplicationError::from)?;
 
     info!("Listening on: {}", listener.local_addr().unwrap());
 
     axum::serve(listener, app)
         .await
-        .map_err(|e| ApplicationError::CannotServe(e))?;
+        .map_err(ApplicationError::CannotServe)?;
     Ok(())
 }
 
@@ -73,7 +73,7 @@ fn setup_tracing() {
 async fn setup_db(data_file: String) -> Result<sqlx::Pool<sqlx::Sqlite>, ApplicationError> {
     let db = create_db_pool(&data_file)
         .await
-        .map_err(|e| ApplicationError::from(e))?;
+        .map_err(ApplicationError::from)?;
     Ok(db)
 }
 

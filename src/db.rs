@@ -13,7 +13,7 @@ use crate::{
         reset_codes::ResetCodesError,
     },
     jwt::{hash_password, verify_password},
-    models::{Code, CodeEntity, CodeValue, User, UserEntity},
+    models::{Code, CodeEntity, CodeValue, CodeValueEntity, User, UserEntity},
 };
 
 pub async fn create_db_pool(path: &str) -> Result<SqlitePool, sqlx::Error> {
@@ -52,7 +52,7 @@ pub async fn read_latest_today(
 ) -> sqlx::Result<Option<CodeValue>> {
     let pattern = format!("{}%", code_prefix);
     let code = sqlx::query_as!(
-        CodeValue,
+        CodeValueEntity,
         r#"
 	SELECT code
 	FROM codes
@@ -102,7 +102,7 @@ pub async fn create_code(
     code: &str,
     user_id: &str,
 ) -> sqlx::Result<Code, AddNumberError> {
-    let latest_code = read_latest_today(db, &code).await?;
+    let latest_code = read_latest_today(db, code).await?;
     let suffix = match latest_code {
         Some(code) => code
             .code
@@ -206,7 +206,7 @@ pub async fn change_password(
     )
     .execute(db)
     .await
-    .map_err(|e| ChangePasswordError::DbError(e))?;
+    .map_err(ChangePasswordError::DbError)?;
 
     Ok(())
 }

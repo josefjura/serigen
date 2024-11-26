@@ -9,6 +9,7 @@ use super::WithLayout;
 pub struct UserManagementTemplate {
     pub from_protected: bool,
     pub is_admin: bool,
+    pub logged_user: Option<String>,
     pub users: Vec<User>,
 }
 

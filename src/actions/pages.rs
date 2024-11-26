@@ -25,6 +25,7 @@ pub async fn index(
             codes: last_ten,
             from_protected,
             is_admin: user.is_admin,
+            logged_user: Some(user.name.clone()),
         }))
     } else {
         Err("Failed to read last ten numbers")

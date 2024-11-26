@@ -52,6 +52,7 @@ pub async fn auth_middleware(
             reason: "Invalid token".to_string(),
             from_protected: false,
             is_admin: false,
+            logged_user: None,
         })
         .into_response())?
     };
@@ -69,6 +70,7 @@ pub async fn auth_middleware(
             reason: e.to_string(),
             from_protected: false,
             is_admin: false,
+            logged_user: None,
         })
         .into_response())?,
     }

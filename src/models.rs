@@ -19,12 +19,12 @@ pub struct Code {
     pub user_name: String,
 }
 
-impl Into<Code> for CodeEntity {
-    fn into(self) -> Code {
+impl From<CodeEntity> for Code {
+    fn from(code: CodeEntity) -> Self {
         Code {
-            code: self.code,
-            created_at: format_date(self.created_at),
-            user_name: self.user_name,
+            code: code.code,
+            created_at: format_date(code.created_at),
+            user_name: code.user_name,
         }
     }
 }
@@ -38,9 +38,9 @@ pub struct CodeValue {
     pub code: String,
 }
 
-impl Into<CodeValue> for CodeValueEntity {
-    fn into(self) -> CodeValue {
-        CodeValue { code: self.code }
+impl From<CodeValueEntity> for CodeValue {
+    fn from(code: CodeValueEntity) -> Self {
+        CodeValue { code: code.code }
     }
 }
 
@@ -61,12 +61,12 @@ pub struct User {
     pub is_admin: bool,
 }
 
-impl Into<User> for UserEntity {
-    fn into(self) -> User {
+impl From<UserEntity> for User {
+    fn from(val: UserEntity) -> Self {
         User {
-            id: self.id,
-            name: self.name,
-            is_admin: if self.is_admin == 1 { true } else { false },
+            id: val.id,
+            name: val.name,
+            is_admin: val.is_admin == 1,
         }
     }
 }

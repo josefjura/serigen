@@ -9,6 +9,7 @@ use super::WithLayout;
 pub struct IndexPageTemplate {
     pub codes: Vec<Code>,
     pub from_protected: bool,
+    pub logged_user: Option<String>,
     pub is_admin: bool,
 }
 

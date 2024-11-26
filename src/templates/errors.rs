@@ -9,6 +9,7 @@ pub struct Error401Template {
     pub reason: String,
     pub from_protected: bool,
     pub is_admin: bool,
+    pub logged_user: Option<String>,
 }
 
 impl WithLayout for Error401Template {}
@@ -20,6 +21,7 @@ pub struct Error500Template {
     pub reason: String,
     pub from_protected: bool,
     pub is_admin: bool,
+    pub logged_user: Option<String>,
 }
 
 impl WithLayout for Error500Template {}

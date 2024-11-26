@@ -28,8 +28,6 @@ use crate::{
     db::check_email_password, jwt::TokenClaims, middleware::FROM_PROTECTED_KEY, state::AppState,
 };
 
-pub const HX_REDIRECT: HeaderName = HeaderName::from_static("hx-redirect");
-
 pub async fn login(session: Session) -> impl IntoResponse {
     let from_protected = get_protected(session).await;
 
@@ -39,6 +37,7 @@ pub async fn login(session: Session) -> impl IntoResponse {
         username: "".to_string(),
         password: "".to_string(),
         error: None,
+        logged_user: None,
     })
 }
 
@@ -87,7 +86,7 @@ pub async fn login_post(
     let token = encode(
         &Header::default(),
         &claims,
-        &EncodingKey::from_secret(&state.jwt_secret.as_ref()),
+        &EncodingKey::from_secret(state.jwt_secret.as_ref()),
     )
     .unwrap();
 
@@ -99,7 +98,7 @@ pub async fn login_post(
 
     let headers = AppendHeaders([
         (SET_COOKIE, cookie.to_string()),
-        (HX_REDIRECT, "/".to_string()),
+        (HeaderName::from_static("hx-redirect"), "/".to_string()),
     ]);
 
     Ok((headers, ()).into_response())
@@ -126,6 +125,7 @@ pub async fn change_password(
     let from_protected = get_protected(session).await;
 
     HtmlTemplate(ChangePasswordPageTemplate {
+        logged_user: Some(user.name.clone()),
         from_protected,
         is_admin: user.is_admin,
         error: None,
@@ -143,7 +143,7 @@ pub async fn change_password_post(
     // Check if the old password is correct
     let is_valid = check_email_password(user.name.clone(), form.old_password.clone(), &state.db)
         .await
-        .map(|user| user.id == user.id)
+        .map(|read_user| read_user.id == user.id)
         .unwrap_or(false);
 
     // Check if old and new passwords are the same
@@ -183,13 +183,10 @@ pub async fn change_password_post(
             is_admin: user.is_admin,
             from_protected,
             reason: "Failed to change password".to_string(),
+            logged_user: Some(user.name.clone()),
         })
         .into_response())?
     }
 
-    Ok(HtmlTemplate(ChangePasswordSuccessTemplate {
-        is_admin: user.is_admin,
-        from_protected,
-    })
-    .into_response())
+    Ok(HtmlTemplate(ChangePasswordSuccessTemplate {}).into_response())
 }

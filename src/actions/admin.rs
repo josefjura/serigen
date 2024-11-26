@@ -36,6 +36,7 @@ pub async fn get_users(
             from_protected,
             is_admin: user.is_admin,
             reason: format!("Failed to read users: {}", e),
+            logged_user: Some(user.name.clone()),
         })
         .into_response()
     })?;
@@ -43,6 +44,7 @@ pub async fn get_users(
     Ok(HtmlTemplate(UserManagementTemplate {
         from_protected,
         is_admin: user.is_admin,
+        logged_user: Some(user.name.clone()),
         users,
     })
     .into_response())
