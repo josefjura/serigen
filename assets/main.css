@@ -127,7 +127,7 @@ nav #logo {
 	font-size: large;	
 }
 
-nav #logo {
+nav #logo, .simple-nav {
 	color: white;
 	text-decoration: none;
 }
@@ -257,4 +257,10 @@ nav .links {
    -4px -4px 5px 0px #0002,
    5px 5px 15px 0px #fff9,
    2px 2px 3px 0px #fff9;
+}
+
+.simple-nav {
+	text-decoration: none;
+	display: flex;
+	align-items: center;
 }
