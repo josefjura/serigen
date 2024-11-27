@@ -22,4 +22,5 @@ ENV SERIGEN_JWT_SECRET=S5zzHDP71TvNvPFAplSgycOIaBYdrMGT3O8mAOpzGeI=
 WORKDIR /usr/local/bin
 COPY --from=builder /app/app .
 COPY --from=builder /app/assets ./assets/
+EXPOSE 80
 ENTRYPOINT ["app"]
