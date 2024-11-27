@@ -92,7 +92,7 @@ pub async fn login_post(
 
     let cookie = Cookie::build(("token", token.to_owned()))
         .path("/")
-        .max_age(Duration::hours(1))
+        .max_age(Duration::days(5))
         .same_site(SameSite::Lax)
         .http_only(true);
 
