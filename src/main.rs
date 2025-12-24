@@ -80,9 +80,9 @@ async fn setup_db(data_file: String) -> Result<sqlx::Pool<sqlx::Sqlite>, Applica
 fn setup_env() -> Result<(String, String, String, String), ApplicationError> {
     dotenv().ok();
 
-    let host = std::env::var("SERIGEN_HOST")
+    let host = std::env::var("SERIGEN_APP_HOST")
         .map_err(|e| ApplicationError::EnvError(e, "SERIGEN_HOST".to_string()))?;
-    let port = std::env::var("SERIGEN_PORT")
+    let port = std::env::var("SERIGEN_APP_PORT")
         .map_err(|e| ApplicationError::EnvError(e, "SERIGEN_PORT".to_string()))?;
     let jwt_secret = std::env::var("SERIGEN_JWT_SECRET")
         .map_err(|e| ApplicationError::EnvError(e, "SERIGEN_JWT_SECRET".to_string()))?;
