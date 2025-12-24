@@ -16,11 +16,11 @@ RUN mv ./target/release/serigen ./app
 
 FROM scratch AS runtime
 ENV SERIGEN_HOST=0.0.0.0
-ENV SERIGEN_PORT=80
+ENV SERIGEN_PORT=8080
 ENV DATABASE_PATH=./data/numbers.sqlite
 ENV SERIGEN_JWT_SECRET=S5zzHDP71TvNvPFAplSgycOIaBYdrMGT3O8mAOpzGeI=
 WORKDIR /usr/local/bin
 COPY --from=builder /app/app .
 COPY --from=builder /app/assets ./assets/
-EXPOSE 80
+EXPOSE 8080
 ENTRYPOINT ["app"]
