@@ -15,8 +15,8 @@ RUN cargo build --release
 RUN mv ./target/release/serigen ./app
 
 FROM scratch AS runtime
-ENV SERIGEN_HOST=0.0.0.0
-ENV SERIGEN_PORT=8080
+ENV SERIGEN_APP_HOST=0.0.0.0
+ENV SERIGEN_APP_PORT=8080
 ENV DATABASE_PATH=./data/numbers.sqlite
 ENV SERIGEN_JWT_SECRET=S5zzHDP71TvNvPFAplSgycOIaBYdrMGT3O8mAOpzGeI=
 WORKDIR /usr/local/bin
