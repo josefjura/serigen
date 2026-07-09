@@ -23,11 +23,3 @@ pub struct CreateUserSchema {
     #[serde(default)]
     pub is_admin: bool,
 }
-
-/// Struct for accessing paged list of items.
-#[derive(Debug, Deserialize)]
-pub struct SearchItemsSchema {
-    pub filter: Option<String>,
-    pub page: Option<u32>,
-    pub count: Option<u32>,
-}

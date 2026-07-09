@@ -1,6 +1,5 @@
 use crate::{
     db::read_filtered,
-    forms::SearchItemsSchema,
     models::{Code, User},
     templates::{
         pages::{IndexPageTemplate, ListPageTemplate, ListSectionTemplate},
@@ -8,9 +7,9 @@ use crate::{
     },
 };
 use axum::{
-    extract::{Path, Query, State},
+    extract::{Query, State},
     response::IntoResponse,
-    Extension, Form,
+    Extension,
 };
 use serde::Deserialize;
 use tower_sessions::Session;

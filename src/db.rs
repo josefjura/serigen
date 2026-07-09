@@ -154,7 +154,7 @@ pub async fn create_code(
         Some(code) => code
             .code
             .split('.')
-            .last()
+            .next_back()
             .ok_or_else(|| AddNumberError::ParseSuffixError(code.code.clone()))?
             .parse::<i64>()
             .map_err(|_| AddNumberError::ParseSuffixError(code.code.clone()))?,

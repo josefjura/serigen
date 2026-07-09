@@ -1,6 +1,6 @@
 use askama::Template;
 
-use crate::models::{Code, CodeResults};
+use crate::models::Code;
 
 use super::WithLayout;
 
