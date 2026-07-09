@@ -1,10 +1,7 @@
 use crate::{
     errors::add_number::AddNumberError,
     models::User,
-    templates::{
-        codes::{CodeItemTemplate, IndexSectionTemplate},
-        HtmlTemplate,
-    },
+    templates::{codes::CodeItemTemplate, pages::IndexSectionTemplate, HtmlTemplate},
 };
 use axum::{
     extract::State,

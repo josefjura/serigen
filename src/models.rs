@@ -29,6 +29,12 @@ impl From<CodeEntity> for Code {
     }
 }
 
+#[derive(Debug)]
+pub struct CodeResults {
+    pub codes: Vec<Code>,
+    pub total: i64
+}
+
 pub struct CodeValueEntity {
     pub code: String,
 }

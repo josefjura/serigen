@@ -13,7 +13,7 @@ use crate::{
         reset_codes::ResetCodesError,
     },
     jwt::{hash_password, verify_password},
-    models::{Code, CodeEntity, CodeValue, CodeValueEntity, User, UserEntity},
+    models::{Code, CodeEntity, CodeResults, CodeValue, CodeValueEntity, User, UserEntity},
 };
 
 pub async fn create_db_pool(path: &str) -> Result<SqlitePool, sqlx::Error> {
@@ -44,6 +44,53 @@ pub async fn read_last_ten(db: &SqlitePool) -> sqlx::Result<Vec<Code>> {
     .await?;
 
     Ok(users.into_iter().map(|x| x.into()).collect())
+}
+
+pub async fn read_filtered(
+    db: &SqlitePool,
+    count: u32,
+    skip: u32,
+    code_filter: &str,
+    user_filter: &str,
+) -> sqlx::Result<CodeResults> {
+    let code_filter = format!("%{}%", code_filter);
+    let user_filter = format!("%{}%", user_filter);
+    let codes = sqlx::query_as!(
+        CodeEntity,
+        r#"
+				SELECT codes.id, code, created_at, users.id as user_id, users.name as user_name
+				FROM codes
+				JOIN users ON codes.user_id = users.id
+				WHERE code like ? AND users.name like ?
+				ORDER BY created_at DESC
+				LIMIT ?
+				OFFSET ?
+			"#,
+        code_filter,
+        user_filter,
+        count,
+        skip
+    )
+    .fetch_all(db)
+    .await?;
+
+    let total = sqlx::query_scalar!(
+        r#"
+				SELECT COUNT(*) as total
+				FROM codes
+				JOIN users ON codes.user_id = users.id
+				WHERE code like ? AND users.name like ?
+			"#,
+        code_filter,
+        user_filter
+    )
+    .fetch_one(db)
+    .await?;
+
+    let codes = codes.into_iter().map(|x| x.into()).collect();
+    let to_return = CodeResults { codes, total };
+
+    Ok(to_return)
 }
 
 pub async fn read_latest_today(

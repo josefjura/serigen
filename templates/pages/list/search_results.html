@@ -1,0 +1,33 @@
+<table id="user-table">
+	<thead>
+		<tr>
+			<td><input type="text" name="code" value="{{ code_filter }}" placeholder="Search code..." hx-get="/list/section" hx-trigger="keyup[key=='Enter']"></td>
+			<td class="center"><input type="text" name="user_name" value="{{ user_filter }}" placeholder="Search created by..." hx-get="/list/section" hx-trigger="keyup[key=='Enter']"></td>
+			<td>
+				<button type="button" hx-get="/list/section" class="styled-btn simple-btn">Search</button>
+				<button type="button" hx-get="/list/section" hx-vals='{"code": "", "user_name": "", "page": 0}' class="styled-btn simple-btn">Clear</button>
+			</td>
+		</tr>
+		<tr>
+			<th class="center">Code</th>
+			<th class="center">Created By</th>
+			<th class="center">Created At</th>
+		</tr>
+	</thead>
+	<tbody id="table-body">
+		{% for code in codes %}
+		<tr>
+			<td>{{ code.code }}</td>
+			<td>{{ code.user_name }}</td>
+			<td>{{ code.created_at }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+<div id="pagination-info" class="pagination">
+	{% if has_prev %}
+	<button type="button" hx-get="/list/section" hx-vals='{"page": {{ prev_page }} }' class="styled-btn simple-btn">Prev</button>
+	{% endif %}
+	<span>{{ codes.len() }} / {{ total }} | Page {{ page + 1 }} / {{ total_pages }}</span>
+	<button type="button" hx-get="/list/section" hx-vals='{"page": {{ next_page }} }' {% if !has_next %}disabled{% endif %} class="styled-btn simple-btn">Next</button>
+</div>

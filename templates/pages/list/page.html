@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+<script>
+
+</script>
+{% endblock %}
+
+{% block content %}
+<div id="codes-list" class="center-top-container">
+	<h1>Script number search</h1>
+	<form id="search-results" hx-target="#search-results" hx-swap="innerHTML" hx-include="closest form">
+		{% include "search_results.html" %}
+	</form>
+</div>
+{% endblock %}

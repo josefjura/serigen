@@ -264,3 +264,12 @@ nav .links {
 	display: flex;
 	align-items: center;
 }
+
+.pagination {
+	display: flex;
+	flex-direction: row;
+	justify-content: right;
+	align-items: center;
+	gap: 10px;
+	margin-top: 20px;
+}

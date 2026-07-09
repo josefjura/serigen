@@ -6,7 +6,7 @@ pub mod admin;
 pub mod auth;
 pub mod codes;
 pub mod errors;
-
+pub mod pages;
 pub trait WithLayout {
     fn version(&self) -> &'static str {
         env!("CARGO_PKG_VERSION")

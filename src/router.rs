@@ -12,13 +12,8 @@ use tower_sessions::{MemoryStore, SessionManagerLayer};
 
 use crate::{
     actions::{
-        admin::{create_user, delete_user, get_users},
-        auth::{change_password, change_password_post, login, login_post, logout_post},
-        codes::{add_code, reset_codes},
-        pages::index,
-    },
-    middleware::auth_middleware,
-    state::AppState,
+        admin::{create_user, delete_user, get_users}, auth::{change_password, change_password_post, login, login_post, logout_post}, codes::{add_code, reset_codes}, pages::{index, list, list_section},
+    }, middleware::auth_middleware, state::AppState,
 };
 
 pub fn setup_router(db: SqlitePool, jwt_secret: &str) -> Router {
@@ -29,6 +24,20 @@ pub fn setup_router(db: SqlitePool, jwt_secret: &str) -> Router {
         .route(
             "/",
             get(index).route_layer(middleware::from_fn_with_state(
+                app_state.clone(),
+                auth_middleware,
+            )),
+        )
+        .route(
+            "/list",
+            get(list).route_layer(middleware::from_fn_with_state(
+                app_state.clone(),
+                auth_middleware,
+            )),
+        )
+        .route(
+            "/list/section",
+            get(list_section).route_layer(middleware::from_fn_with_state(
                 app_state.clone(),
                 auth_middleware,
             )),
