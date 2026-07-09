@@ -1,0 +1,20 @@
+{
+  "db_name": "SQLite",
+  "query": "\n\t\t\t\tSELECT COUNT(*) as total\n\t\t\t\tFROM codes\n\t\t\t\tJOIN users ON codes.user_id = users.id\n\t\t\t\tWHERE code like ? AND users.name like ?\n\t\t\t",
+  "describe": {
+    "columns": [
+      {
+        "name": "total",
+        "ordinal": 0,
+        "type_info": "Integer"
+      }
+    ],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "3903bda59e85288d363ee926e04adc10d9949144fd7a2e84f1b28a55fd8717fd"
+}

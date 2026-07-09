@@ -1,0 +1,44 @@
+{
+  "db_name": "SQLite",
+  "query": "\n\t\t\t\tSELECT codes.id, code, created_at, users.id as user_id, users.name as user_name\n\t\t\t\tFROM codes\n\t\t\t\tJOIN users ON codes.user_id = users.id\n\t\t\t\tWHERE code like ? AND users.name like ?\n\t\t\t\tORDER BY created_at DESC\n\t\t\t\tLIMIT ?\n\t\t\t\tOFFSET ?\n\t\t\t",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "code",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "created_at",
+        "ordinal": 2,
+        "type_info": "Datetime"
+      },
+      {
+        "name": "user_id",
+        "ordinal": 3,
+        "type_info": "Integer"
+      },
+      {
+        "name": "user_name",
+        "ordinal": 4,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 4
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "2d746e4b2d5b98dba0f11440e6f3830e9d81710d01f39a69db4c284651328b2d"
+}
