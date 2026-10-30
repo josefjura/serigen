@@ -12,7 +12,7 @@ use tower_sessions::{MemoryStore, SessionManagerLayer};
 
 use crate::{
     actions::{
-        admin::{create_user, delete_user, get_users}, auth::{change_password, change_password_post, login, login_post, logout_post}, codes::{add_code, reset_codes}, pages::{index, list, list_section},
+        admin::{create_user, delete_user, get_users}, auth::{change_password, change_password_post, login, login_post, logout_post}, codes::{add_code, reset_codes}, health::health, pages::{index, list, list_section},
     }, middleware::auth_middleware, state::AppState,
 };
 
@@ -84,5 +84,7 @@ pub fn setup_router(db: SqlitePool, jwt_secret: &str) -> Router {
         .nest_service("/favicon.ico", ServeFile::new("assets/favicon.ico"))
         .layer(session_layer)
         .layer(TraceLayer::new_for_http())
+        // Added after the layers so probes skip sessions, auth and request tracing.
+        .route("/health", get(health))
         .with_state(app_state)
 }

@@ -197,3 +197,22 @@ async fn create_user(db: SqlitePool) -> sqlx::Result<()> {
 
     Ok(())
 }
+
+#[sqlx::test]
+async fn health_returns_ok_without_session(db: SqlitePool) {
+    use axum::{body::Body, http::Request, http::StatusCode};
+    use tower::ServiceExt;
+
+    let response = crate::router::setup_router(db, "secret")
+        .oneshot(Request::get("/health").body(Body::empty()).unwrap())
+        .await
+        .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+    assert!(response.headers().get("set-cookie").is_none());
+
+    let body = axum::body::to_bytes(response.into_body(), usize::MAX)
+        .await
+        .unwrap();
+    assert_eq!(&body[..], b"ok");
+}
